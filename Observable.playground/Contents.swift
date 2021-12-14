@@ -124,3 +124,32 @@ Observable<Int>.create { observer -> Disposable in
     }
 )
 .disposed(by: disposeBag)
+
+print("------ deffered 1 ------")
+Observable.deferred {
+    Observable.of(1, 2, 3)
+}
+.subscribe {
+    print($0)
+}
+.disposed(by: disposeBag)
+
+print("------ deffered 2 ------")
+var flip: Bool = false
+
+let factory: Observable<String> = Observable.deferred {
+    flip = !flip
+    
+    if flip {
+        return Observable.of("👍")
+    } else {
+        return Observable.of("👎")
+    }
+}
+
+for _ in 0...3 {
+    factory.subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+}
