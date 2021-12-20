@@ -79,3 +79,22 @@ guest.onNext("셋째손님")
 openTime.onNext("땡!")
 guest.onNext("넷째손님")
 guest.onNext("다섯째손님")
+
+
+print("---- take ----")
+Observable.of("금", "은", "동", "철", "구리")
+    .take(2)
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+print("---- takeWhile ----")
+Observable.of("금", "은", "동", "철", "구리")
+    .take(while: {
+        $0 != "철"
+    })
+    .subscribe(onNext:{
+        print($0)
+    })
+    .disposed(by: disposeBag)
