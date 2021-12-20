@@ -62,3 +62,20 @@ Observable.of("가", "나", "다", "라", "마", "바", "사")
     })
     .disposed(by: disposeBag)
 
+print("---- skipUntil ----")
+let guest = PublishSubject<String>()
+let openTime = PublishSubject<String>()
+
+guest
+    .skip(until: openTime)
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+guest.onNext("첫손님")
+guest.onNext("둘째손님")
+guest.onNext("셋째손님")
+openTime.onNext("땡!")
+guest.onNext("넷째손님")
+guest.onNext("다섯째손님")
