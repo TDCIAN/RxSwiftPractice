@@ -98,3 +98,39 @@ Observable.of("금", "은", "동", "철", "구리")
         print($0)
     })
     .disposed(by: disposeBag)
+
+print("---- enumerated ----")
+Observable.of("금", "은", "동", "철", "구리")
+    .enumerated()
+    .takeWhile {
+        $0.index < 3
+    }
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+print("---- takeUntil ----")
+let checkOne = PublishSubject<String>()
+let checkTwo = PublishSubject<String>()
+
+checkOne
+    .take(until: checkTwo)
+    .subscribe(onNext:{
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+checkOne.onNext("여")
+checkOne.onNext("남")
+
+checkTwo.onNext("끝")
+checkOne.onNext("다른남")
+
+print("---- distincUntilChanged ----")
+Observable.of("저는", "저는", "앵무새", "앵무새", "앵무새", "앵무새", "입니다", "입니다")
+    .distinctUntilChanged()
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
