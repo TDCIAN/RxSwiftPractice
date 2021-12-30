@@ -70,3 +70,72 @@ Observable.of(gangbook, gangnam)
         print($0)
     })
     .disposed(by: disposeBag)
+
+
+print("--- combineLatest1 ---")
+let lastName = PublishSubject<String>()
+let firstName = PublishSubject<String>()
+
+let fullName = Observable
+    .combineLatest(lastName, firstName) { lastName, firstName in
+        lastName + firstName
+    }
+
+fullName
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+lastName.onNext("김")
+firstName.onNext("똘똘")
+firstName.onNext("명수")
+firstName.onNext("은영")
+firstName.onNext("재석")
+lastName.onNext("이")
+lastName.onNext("박")
+lastName.onNext("최")
+
+
+print("--- combineLatest2 ---")
+let dateFormat = Observable<DateFormatter.Style>.of(.short, .long)
+let currentDate = Observable.of(Date())
+
+let showCurrentDate = Observable
+    .combineLatest(
+        dateFormat,
+        currentDate,
+        resultSelector: { dateformat, currentdate -> String in
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = dateformat
+            return dateFormatter.string(from: currentdate)
+        }
+    )
+
+showCurrentDate
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+print("--- combineLatest3 ---")
+let lastName2 = PublishSubject<String>()
+let firstName2 = PublishSubject<String>()
+
+let fullName2 = Observable
+    .combineLatest([lastName2, firstName2]) { name in
+        name.joined(separator: " ")
+    }
+
+fullName2
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+lastName2.onNext("Kim")
+firstName2.onNext("Paul")
+firstName2.onNext("Stella")
+firstName2.onNext("Lily")
+
+print("--- zip ---")
