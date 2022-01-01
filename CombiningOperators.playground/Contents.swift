@@ -164,6 +164,7 @@ let runner = PublishSubject<String>()
 
 bang
     .withLatestFrom(runner)
+    .distinctUntilChanged()
     .subscribe(onNext: {
         print($0)
     })
@@ -176,3 +177,41 @@ runner.onNext("runner1 runner2 runner3")
 bang.onNext(Void())
 bang.onNext(Void())
 
+print("--- sample ---")
+let start = PublishSubject<Void>()
+let f1Player = PublishSubject<String>()
+
+f1Player
+    .sample(start)
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+f1Player.onNext("🚗")
+f1Player.onNext("🚗  🚙")
+f1Player.onNext("🚗  🚙  🚕")
+start.onNext(Void())
+start.onNext(Void())
+start.onNext(Void())
+
+print("--- amb ---") // 모호함을 의미 -> 먼저 온 시퀀스만 방출하고 나머지는 보지 않는다.
+let bus1 = PublishSubject<String>()
+let bus2 = PublishSubject<String>()
+
+let station = bus1.amb(bus2)
+
+station
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+bus2.onNext("bus2 - passenger 0")
+bus1.onNext("bus1 - passenger 0")
+bus1.onNext("bus1 - passenger 1")
+bus2.onNext("bus2 - passenger 1")
+bus1.onNext("bus1 - passenger 2")
+bus2.onNext("bus2 - passenger 2")
+
+// bus2가 먼저 onNext 했기 때문에 그 뒤로는 bus2만 본다.
