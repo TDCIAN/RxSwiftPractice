@@ -158,4 +158,21 @@ matchResult
     })
     .disposed(by: disposeBag)
 
+print("--- withLatestFrom1 ---")
+let bang = PublishSubject<Void>()
+let runner = PublishSubject<String>()
+
+bang
+    .withLatestFrom(runner)
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+runner.onNext("runner1")
+runner.onNext("runner1 runner2")
+runner.onNext("runner1 runner2 runner3")
+
+bang.onNext(Void())
+bang.onNext(Void())
 
