@@ -139,3 +139,23 @@ firstName2.onNext("Stella")
 firstName2.onNext("Lily")
 
 print("--- zip ---")
+enum Consequence {
+    case win
+    case lose
+}
+
+let result = Observable<Consequence>.of(.win, .win, .lose, .win, .lose)
+let player = Observable<String>.of("Korea", "Swiss", "USA", "Brasil", "Japan", "China")
+
+let matchResult = Observable
+    .zip(result, player) { result, represent in
+        return represent + "선수" + " \(result)"
+    }
+
+matchResult
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+
