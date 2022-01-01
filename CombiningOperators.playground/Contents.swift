@@ -215,3 +215,31 @@ bus1.onNext("bus1 - passenger 2")
 bus2.onNext("bus2 - passenger 2")
 
 // bus2가 먼저 onNext 했기 때문에 그 뒤로는 bus2만 본다.
+
+print("--- switchLatest ---")
+let student1 = PublishSubject<String>()
+let student2 = PublishSubject<String>()
+let student3 = PublishSubject<String>()
+
+let handUp = PublishSubject<Observable<String>>()
+
+let handUpClass = handUp.switchLatest()
+
+handUpClass
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+handUp.onNext(student1)
+student1.onNext("student1: I'm a studen1")
+student2.onNext("student2: Here!")
+
+handUp.onNext(student2)
+student2.onNext("student2: I'm a studen2")
+student1.onNext("student1: It's my turn!")
+
+handUp.onNext(student3)
+student2.onNext("student2: No, it's my turn!")
+student1.onNext("student1: What the,,,")
+student3.onNext("student3: Hi I'm student3")
