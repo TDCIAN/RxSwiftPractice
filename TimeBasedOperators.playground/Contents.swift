@@ -57,10 +57,31 @@ source
     .disposed(by: disposeBag)
 
 print("--- window ---")
-let maxObervableCount = 1
-let timeToMake = RxTimeInterval.seconds(2)
-
-let window = PublishSubject<String>()
-
-let windowCount = 0
+//let maxObervableCount = 5
+//let timeToMake = RxTimeInterval.seconds(2)
+//
+//let window = PublishSubject<String>()
+//
+//var windowCount = 0
+//let windowTimerSource = DispatchSource.makeTimerSource()
+//windowTimerSource.schedule(deadline: .now() + 2, repeating: .seconds(1))
+//windowTimerSource.setEventHandler {
+//    windowCount += 1
+//    window.onNext("\(windowCount)")
+//}
+//windowTimerSource.resume()
+//
+//window
+//    .window(
+//        timeSpan: timeToMake,
+//        count: maxObervableCount,
+//        scheduler: MainScheduler.instance
+//    )
+//    .flatMap { windowObservable -> Observable<(index: Int, element: String)> in
+//        return windowObservable.enumerated()
+//    }
+//    .subscribe(onNext: {
+//        print("\($0.index)번째 Observable의 요소 \($0.element)")
+//    })
+//    .disposed(by: disposeBag)
 
