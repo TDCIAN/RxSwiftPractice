@@ -243,3 +243,17 @@ handUp.onNext(student3)
 student2.onNext("student2: No, it's my turn!")
 student1.onNext("student1: What the,,,")
 student3.onNext("student3: Hi I'm student3")
+
+print("--- reduce ---")
+Observable.from((1...10))
+//    .reduce(0, accumulator: { summary, newValue in
+//        return summary + newValue
+//    })
+//    .reduce(0) { summary, newValue in
+//        return summary + newValue
+//    }
+    .reduce(0, accumulator: +)
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
