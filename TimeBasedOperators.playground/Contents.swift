@@ -19,42 +19,42 @@ parrot
 hello.onNext("3. 안녕하세요")
 
 print("--- replayAll ---")
-let doctorStrange = PublishSubject<String>()
-let timeStone = doctorStrange.replayAll()
-timeStone.connect()
-
-doctorStrange.onNext("도르마무")
-doctorStrange.onNext("거래를 하러왔다")
-
-timeStone
-    .subscribe(onNext: {
-        print($0)
-    })
-    .disposed(by: disposeBag)
+//let doctorStrange = PublishSubject<String>()
+//let timeStone = doctorStrange.replayAll()
+//timeStone.connect()
+//
+//doctorStrange.onNext("도르마무")
+//doctorStrange.onNext("거래를 하러왔다")
+//
+//timeStone
+//    .subscribe(onNext: {
+//        print($0)
+//    })
+//    .disposed(by: disposeBag)
 
 print("--- buffer ---")
-let source = PublishSubject<String>()
-
-var count = 0
-let timer = DispatchSource.makeTimerSource()
-
-timer.schedule(deadline: .now() + 2, repeating: .seconds(1))
-timer.setEventHandler {
-    count += 1
-    source.onNext("\(count)")
-}
-timer.resume()
-
-source
-    .buffer(
-        timeSpan: .seconds(2),
-        count: 2,
-        scheduler: MainScheduler.instance
-    )
-    .subscribe(onNext: {
-        print($0)
-    })
-    .disposed(by: disposeBag)
+//let source = PublishSubject<String>()
+//
+//var count = 0
+//let timer = DispatchSource.makeTimerSource()
+//
+//timer.schedule(deadline: .now() + 2, repeating: .seconds(1))
+//timer.setEventHandler {
+//    count += 1
+//    source.onNext("\(count)")
+//}
+//timer.resume()
+//
+//source
+//    .buffer(
+//        timeSpan: .seconds(2),
+//        count: 2,
+//        scheduler: MainScheduler.instance
+//    )
+//    .subscribe(onNext: {
+//        print($0)
+//    })
+//    .disposed(by: disposeBag)
 
 print("--- window ---")
 //let maxObervableCount = 5
@@ -86,23 +86,39 @@ print("--- window ---")
 //    .disposed(by: disposeBag)
 
 print("--- delaySubscription ---")
-let delaySource = PublishSubject<String>()
-
-var delayCount = 0
-let delayTimeSource = DispatchSource.makeTimerSource()
-delayTimeSource.schedule(deadline: .now()+2, repeating: .seconds(1))
-delayTimeSource.setEventHandler {
-    delayCount += 1
-    delaySource.onNext("\(delayCount)")
-}
-delayTimeSource.resume()
-
-delaySource
-    .delaySubscription(.seconds(2), scheduler: MainScheduler.instance)
-    .subscribe(onNext: {
-        print($0)
-    })
-    .disposed(by: disposeBag)
+//let delaySource = PublishSubject<String>()
+//
+//var delayCount = 0
+//let delayTimeSource = DispatchSource.makeTimerSource()
+//delayTimeSource.schedule(deadline: .now()+2, repeating: .seconds(1))
+//delayTimeSource.setEventHandler {
+//    delayCount += 1
+//    delaySource.onNext("\(delayCount)")
+//}
+//delayTimeSource.resume()
+//
+//delaySource
+//    .delaySubscription(.seconds(2), scheduler: MainScheduler.instance)
+//    .subscribe(onNext: {
+//        print($0)
+//    })
+//    .disposed(by: disposeBag)
 
 print("--- delay ---")
+let delaySubject = PublishSubject<Int>()
 
+var delayCount = 0
+let delayTimerSource = DispatchSource.makeTimerSource()
+delayTimerSource.schedule(deadline: .now(), repeating: .seconds(1))
+delayTimerSource.setEventHandler {
+    delayCount += 1
+    delaySubject.onNext(delayCount)
+}
+delayTimerSource.resume()
+
+delaySubject
+    .delay(.seconds(3), scheduler: MainScheduler.instance)
+    .subscribe(onNext: {
+        print("delay: \($0)")
+    })
+    .disposed(by: disposeBag)
