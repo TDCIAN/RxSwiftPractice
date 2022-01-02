@@ -124,9 +124,20 @@ print("--- delay ---")
 //    .disposed(by: disposeBag)
 
 print("--- interval ---")
+//Observable<Int>
+//    .interval(.seconds(3), scheduler: MainScheduler.instance)
+//    .subscribe(onNext: {
+//        print("interval: \($0)")
+//    })
+//    .disposed(by: disposeBag)
+
+print("--- timer ---")
 Observable<Int>
-    .interval(.seconds(3), scheduler: MainScheduler.instance)
+    .timer(.seconds(5),
+           period: .seconds(2),
+           scheduler: MainScheduler.instance
+    )
     .subscribe(onNext: {
-        print("interval: \($0)")
+        print("timer: \($0)")
     })
     .disposed(by: disposeBag)
