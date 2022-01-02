@@ -19,3 +19,21 @@ parrot
 hello.onNext("3. 안녕하세요")
 
 print("--- replayAll ---")
+let doctorStrange = PublishSubject<String>()
+let timeStone = doctorStrange.replayAll()
+timeStone.connect()
+
+doctorStrange.onNext("도르마무")
+doctorStrange.onNext("거래를 하러왔다")
+
+timeStone
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+print("--- buffer ---")
+let source = PublishSubject<String>()
+
+var count = 0
+let timer = 
