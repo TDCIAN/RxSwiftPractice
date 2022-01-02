@@ -105,20 +105,28 @@ print("--- delaySubscription ---")
 //    .disposed(by: disposeBag)
 
 print("--- delay ---")
-let delaySubject = PublishSubject<Int>()
+//let delaySubject = PublishSubject<Int>()
+//
+//var delayCount = 0
+//let delayTimerSource = DispatchSource.makeTimerSource()
+//delayTimerSource.schedule(deadline: .now(), repeating: .seconds(1))
+//delayTimerSource.setEventHandler {
+//    delayCount += 1
+//    delaySubject.onNext(delayCount)
+//}
+//delayTimerSource.resume()
+//
+//delaySubject
+//    .delay(.seconds(3), scheduler: MainScheduler.instance)
+//    .subscribe(onNext: {
+//        print("delay: \($0)")
+//    })
+//    .disposed(by: disposeBag)
 
-var delayCount = 0
-let delayTimerSource = DispatchSource.makeTimerSource()
-delayTimerSource.schedule(deadline: .now(), repeating: .seconds(1))
-delayTimerSource.setEventHandler {
-    delayCount += 1
-    delaySubject.onNext(delayCount)
-}
-delayTimerSource.resume()
-
-delaySubject
-    .delay(.seconds(3), scheduler: MainScheduler.instance)
+print("--- interval ---")
+Observable<Int>
+    .interval(.seconds(3), scheduler: MainScheduler.instance)
     .subscribe(onNext: {
-        print("delay: \($0)")
+        print("interval: \($0)")
     })
     .disposed(by: disposeBag)
