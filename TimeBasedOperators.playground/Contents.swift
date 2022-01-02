@@ -85,3 +85,24 @@ print("--- window ---")
 //    })
 //    .disposed(by: disposeBag)
 
+print("--- delaySubscription ---")
+let delaySource = PublishSubject<String>()
+
+var delayCount = 0
+let delayTimeSource = DispatchSource.makeTimerSource()
+delayTimeSource.schedule(deadline: .now()+2, repeating: .seconds(1))
+delayTimeSource.setEventHandler {
+    delayCount += 1
+    delaySource.onNext("\(delayCount)")
+}
+delayTimeSource.resume()
+
+delaySource
+    .delaySubscription(.seconds(2), scheduler: MainScheduler.instance)
+    .subscribe(onNext: {
+        print($0)
+    })
+    .disposed(by: disposeBag)
+
+print("--- delay ---")
+
