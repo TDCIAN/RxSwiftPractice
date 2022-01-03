@@ -1,4 +1,7 @@
 import RxSwift
+import RxCocoa
+import UIKit
+import PlaygroundSupport
 
 let disposeBag = DisposeBag()
 
@@ -132,12 +135,30 @@ print("--- interval ---")
 //    .disposed(by: disposeBag)
 
 print("--- timer ---")
-Observable<Int>
-    .timer(.seconds(5),
-           period: .seconds(2),
-           scheduler: MainScheduler.instance
-    )
-    .subscribe(onNext: {
-        print("timer: \($0)")
+//Observable<Int>
+//    .timer(.seconds(5),
+//           period: .seconds(2),
+//           scheduler: MainScheduler.instance
+//    )
+//    .subscribe(onNext: {
+//        print("timer: \($0)")
+//    })
+//    .disposed(by: disposeBag)
+
+print("--- timeout ---")
+let errorIfNotPushed = UIButton(type: .system)
+errorIfNotPushed.setTitle("눌러주세요!", for: .normal)
+errorIfNotPushed.sizeToFit()
+
+PlaygroundPage.current.liveView = errorIfNotPushed
+
+errorIfNotPushed.rx.tap
+    .do(onNext: {
+        print("tap")
     })
+    .timeout(.seconds(5),
+             scheduler: MainScheduler.instance)
+    .subscribe {
+        print("timeout: \($0)")
+    }
     .disposed(by: disposeBag)
